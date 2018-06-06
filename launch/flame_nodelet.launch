@@ -53,4 +53,8 @@
               /tf_static
               -o flame">
   </node>
+  <node pkg="octomap_server" type="octomap_tracking_server_node" name="octomap_tracking_sserver_node" output="screen" >
+  <remap from="/cloud_in" to="/flame/cloud" />
+   <param name="frame_id" type="string" value="world" />
+  </node>
 </launch>

@@ -1,7 +1,7 @@
 # flame_offline parameters.
-pose_path: /home/wng/Projects/rrg/data/euroc_mav_datasets/V1_01_easy/mav0/state_groundtruth_estimate0
-rgb_path: /home/wng/Projects/rrg/data/euroc_mav_datasets/V1_01_easy/mav0/cam0
-depth_path: /home/wng/Projects/rrg/data/euroc_mav_datasets/V1_01_easy/mav0/depthmap0
+pose_path: /home/drive/00/mav0/state_groundtruth_estimate0
+rgb_path: /home/drive/00/mav0/cam0
+depth_path: /home/chengi
 world_frame: RFU
 
 input:

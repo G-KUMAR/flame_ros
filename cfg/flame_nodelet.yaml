@@ -1,6 +1,6 @@
 # FlameNodelet params.
 input:
-  camera_frame_id: openni_rgb_optical_frame
+  camera_frame_id: mv_26806796
   camera_world_frame_id: camera_world
   subsample_factor: 1 # Process one out of this many images.
   poseframe_subsample_factor: 6 # Create pf every this number of images. Ignored if use_poseframe_updates is true.
@@ -10,12 +10,12 @@ input:
 
 output:
   quiet: false # Turn off terminal output.
-  mesh: true # Publish mesh as pcl_msgs/PolygonMesh.
+  mesh: false # Publish mesh as pcl_msgs/PolygonMesh.
   idepthmap: false # Publish idepthmap as sensor_msgs/Image.
   depthmap: false # Publish depthmap as sensor_msgs/Image.
-  cloud: false # Publish pointcloud sensor_msgs/PointCloud2. Prefer mesh or depthmap (in that order).
+  cloud: true # Publish pointcloud sensor_msgs/PointCloud2. Prefer mesh or depthmap (in that order).
   features: false # Publish raw features points as sensors_msgs/Image.
-  stats: true # Publish statistics message.
+  stats: false # Publish statistics message.
 
   # Integrate load measurements over this many frames before reporting. Timing
   # resolution of /proc is only a Jiffy (usually 0.01 sec), so querying faster
@@ -26,7 +26,7 @@ output:
   # scene depth is >> 1m, then coloring by idepth will not provide much dynamic
   # range. Coloring by scene_color_scale * idepth (if scene_color_scale > 1) is
   # much more informative.
-  scene_color_scale: 1.0
+  scene_color_scale: 1.5
 
   # Filter out oblique triangles for display. This does not change the
   # underlying graph - it only affects the output/display.
@@ -49,7 +49,7 @@ output:
   max_angular_rate: 0.0 # deg/sec
 
 debug:
-  wireframe: true # Mesh wireframe colored by idepth.
+  wireframe: false   # Mesh wireframe colored by idepth.
   features: true # Features colored by idepth.
   detections: false # Feature detections
   matches: false # Epipolar line searches (green success, red failure).
