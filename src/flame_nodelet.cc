@@ -40,6 +40,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include <ros/ros.h>
 
@@ -73,6 +74,7 @@
 
 #include <flame_ros/FlameStats.h>
 #include <flame_ros/FlameNodeletStats.h>
+#include <nav_msgs/OccupancyGrid.h>
 
 #include "./utils.h"
 
@@ -368,6 +370,7 @@ class FlameNodelet : public nodelet::Nodelet {
     }
     if (publish_depthmap_) {
       depth_pub_ = it_->advertiseCamera("depth_registered/image_rect", 5);
+      map_pub = nh.advertise<nav_msgs::OccupancyGrid>("/map", 10);
     }
     if (publish_features_) {
       features_pub_ = it_->advertiseCamera("depth_registered_raw/image_rect", 5);
@@ -701,9 +704,59 @@ class FlameNodelet : public nodelet::Nodelet {
         }
       }
 
+    nav_msgs::OccupancyGrid map_;
       if (publish_depthmap_) {
-        publishDepthMap(depth_pub_, input_->live_frame_id(), time, input_->K(),
-                        depth_est);
+        // cv::imshow("depth",depth_est(cv::Rect(cv::Point(0, 160), cv::Point(752, 320))))
+        // cv::waitKey(0);
+            //  std::cout<< "dens=";
+            // std::cout << (int)depth_est(cv::Rect(cv::Point(0, 160), cv::Point(752, 320))).at<uchar>(80, 360) << std::endl;
+            // int sum_ = 0, sum[752] = {0};
+            // for (int iii = 0; iii < 752; iii++)
+            // {
+            //   for (int jjj = 0; jjj < 160; jjj++)
+            //   {
+            //     if ((int)depth_est(cv::Rect(cv::Point(0, 160), cv::Point(752, 320))).at<uchar>(jjj, iii) > 150 || (int)depth_est(cv::Rect(cv::Point(0, 160), cv::Point(752, 320))).at<uchar>(jjj, iii)==0)
+            //     {
+            //       // depth_est.at<uchar>(jjj, iii) = 255;
+            //       sum_ = sum_ + 1;
+            //     }
+            //     else
+            //     {
+            //       sum_ = sum_ - 1;
+            //       // depth_est.at<uchar>(jjj, iii) = 0;
+            //     }
+            //   }
+            //   if (sum_ > 0)
+            //     sum[iii] = 0;
+            //   else
+            //     sum[iii] = 100;
+            //   sum_ = 0;
+            //   // depth_est.at<uchar>(159,iii) = sum[iii];
+            // }
+
+            // map_.header.stamp = ros::Time::now();
+            // map_.header.frame_id = "map";
+            // map_.info.resolution = 0.05f;
+            // map_.info.height = 200;
+            // map_.info.width = 752;
+            // map_.info.origin.position.x = -18.8;
+            // map_.info.origin.position.y = 0;
+            // for (int ii = 0; ii < 200; ii++)
+            // {
+            //   for (int jj = 0; jj < 752; jj++)
+            //   {
+            //     //     		if(ii<20)
+            //     //     			map_.data[ii*200+jj]=0;
+            //     //     		else if(ii>20 )
+            //     // std::cout <<"done"<<ii<<","<<jj<<std::endl;
+            //     //     			map_.data[ii*200+jj]=100;
+            //     map_.data.push_back(sum[jj]);
+            //   }
+            // }
+
+            // map_pub.publish(map_);
+            publishDepthMap(depth_pub_, input_->live_frame_id(), time, input_->K(),
+                            depth_est);
       }
 
       if (publish_cloud_) {
@@ -713,7 +766,6 @@ class FlameNodelet : public nodelet::Nodelet {
                           depth_est, 0.1f, max_depth);
       }
     }
-
     if (publish_features_) {
       cv::Mat1f depth_raw(img_gray.rows, img_gray.cols,
                           std::numeric_limits<float>::quiet_NaN());
@@ -804,8 +856,12 @@ class FlameNodelet : public nodelet::Nodelet {
     if (params_.debug_draw_idepthmap) {
       sensor_msgs::Image::Ptr debug_img_msg =
           cv_bridge::CvImage(hdr, "bgr8",
-                             sensor_->getDebugImageInverseDepthMap()).toImageMsg();
+                             sensor_->getDebugImageInverseDepthMap()(cv::Rect(cv::Point(0, 159), cv::Point(751, 319)))).toImageMsg();
       debug_idepthmap_pub_.publish(debug_img_msg);
+      // std::cout <<"debug"<< sensor_->getDebugImageInverseDepthMap()<<std::endl;
+      // cv::imshow("depth", sensor_->getDebugImageInverseDepthMap()(cv::Rect(cv::Point(0, 159), cv::Point(751, 319))));
+      // cv::waitKey(0);
+      // image(Rect(Point(0, 10), Point(10, 0))).copyTo(cropped_image);
     }
 
     stats_.tock("debug_publishing");
@@ -866,6 +922,7 @@ class FlameNodelet : public nodelet::Nodelet {
   // Publishes mesh.
   bool publish_mesh_;
   ros::Publisher mesh_pub_;
+  ros::Publisher map_pub;
 
   // Publishes depthmap.
   cv::Mat1f idepthmap_;

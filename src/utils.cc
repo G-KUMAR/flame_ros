@@ -31,6 +31,7 @@
 
 #include <flame_ros/FlameNodeletStats.h>
 #include <flame_ros/FlameStats.h>
+#include <nav_msgs/OccupancyGrid.h>
 
 namespace fu = flame::utils;
 
@@ -236,10 +237,11 @@ void publishDepthMesh(const ros::Publisher& mesh_pub,
   return;
 }
 
-void publishDepthMap(const image_transport::CameraPublisher& pub,
-                     const std::string& frame_id,
-                     double time, const Eigen::Matrix3f& K,
-                     const cv::Mat1f& depth_est) {
+void publishDepthMap(const image_transport::CameraPublisher &pub,
+                     const std::string &frame_id,
+                     double time, const Eigen::Matrix3f &K,
+                     const cv::Mat1f &depth_est)
+{
   // Publish depthmap.
   std_msgs::Header header;
   header.stamp.fromSec(time);
@@ -265,13 +267,28 @@ void publishDepthMap(const image_transport::CameraPublisher& pub,
   cinfo->R[4] = 1.0;
   cinfo->R[8] = 1.0;
 
-  cv_bridge::CvImage depth_cvi(header, "32FC1", depth_est);
+  cv_bridge::CvImage depth_cvi(header, "32FC1", depth_est(cv::Rect(cv::Point(0, 160), cv::Point(752, 320))));
 
   pub.publish(depth_cvi.toImageMsg(), cinfo);
-
+  // std::cout << "debug=";
+  // for (int iii = 0; iii <160 ; iii++)
+  // {
+  //   for(int jjj=0;jjj<752;jjj++)
+  //   {
+  //     if (depth_est(cv::Rect(cv::Point(0, 160), cv::Point(752, 320))).at<uint16_t>(jjj, iii) * 0.001f>3)
+  //       std::cout<<1;
+  //     else
+  //       std::cout<<0;
+  //   }
+  //   std::cout << std::endl;
+  // }
+  // std::cout << std::endl;
+ 
+  
   return;
 }
 
+  float min = 1.5, max = 1.5;
 void publishPointCloud(const ros::Publisher& pub,
                        const std::string& frame_id,
                        double time, const Eigen::Matrix3f& K,
@@ -285,7 +302,6 @@ void publishPointCloud(const ros::Publisher& pub,
   cloud.height = height;
   cloud.is_dense = false;
   cloud.points.resize(width * height);
-
   Eigen::Matrix3f Kinv(K.inverse());
   for (int ii = 0; ii < height; ++ii) {
     for (int jj = 0; jj < width; ++jj) {
@@ -308,6 +324,13 @@ void publishPointCloud(const ros::Publisher& pub,
       cloud.points[idx].x = xyz(0);
       cloud.points[idx].y = xyz(1);
       cloud.points[idx].z = xyz(2);
+      // if (cloud.points[idx].y==.79)
+      
+      // if ((cloud.points[idx].x)<min)
+      // min=(cloud.points[idx].x);
+      // else if ((cloud.points[idx].x)>max)
+      // max=(cloud.points[idx].x);
+      //   std::cout << "debug" <<min<<","<<max<< std::endl;
     }
   }
 

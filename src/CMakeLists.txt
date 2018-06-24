@@ -16,7 +16,7 @@ install(TARGETS flame_ros_nodelets
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
+add_definitions("-std=c++11")
 # Needed to ensure flame_ros messages are built before these targets.
 add_dependencies(flame_ros_nodelets
   ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

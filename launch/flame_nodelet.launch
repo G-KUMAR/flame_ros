@@ -21,17 +21,18 @@
     <!-- Launch the nodelet manager. -->
     <node if="$(arg standalone)"
           pkg="nodelet" type="nodelet" name="$(arg manager)"
-          args="manager" output="$(arg output_dest)" >
+          args="manager" output="$(arg output_dest)" respawn="true" >
     </node>
 
     <!-- Launch the nodelet.. -->
     <node pkg="nodelet" type="nodelet" name="flame_nodelet"
           args="load flame_ros/FlameNodelet $(arg manager)"
-          output="$(arg output_dest)">
+          output="$(arg output_dest)" respawn="true"  >
       <rosparam command="load" if="$(arg load_params)"
                 file="$(find flame_ros)/cfg/$(arg param_file)"/>
       <remap from="image" to="$(arg image)" />
       <remap from="keyframes" to="$(arg keyframes)" />
+
     </node>
 
   </group>
@@ -53,8 +54,13 @@
               /tf_static
               -o flame">
   </node>
-  <node pkg="octomap_server" type="octomap_tracking_server_node" name="octomap_tracking_sserver_node" output="screen" >
+<!-- <node pkg="octomap_server" type="octomap_tracking_server_node" name="octomap_tracking_sserver_node" output="screen" >
   <remap from="/cloud_in" to="/flame/cloud" />
-   <param name="frame_id" type="string" value="world" />
-  </node>
+   <param name="frame_id" type="string" value="map" />
+   <param name="height_map" type="bool" value="false" />
+   <param name="sensor_model/max_range" type="double" value="3.0" />
+   <param name="occupancy_min_z" type="double" value="-0.4" />
+   <param name="occupancy_max_z" type="double" value="0.1" />
+</node>  -->
+
 </launch>

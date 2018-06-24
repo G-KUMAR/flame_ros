@@ -17,12 +17,12 @@ input:
 
 output:
   quiet: false # Turn off terminal output.
-  mesh: true # Publish mesh as pcl_msgs/PolygonMesh.
+  mesh: false # Publish mesh as pcl_msgs/PolygonMesh.
   idepthmap: false # Publish idepthmap as sensor_msgs/Image.
-  depthmap: false # Publish depthmap as sensor_msgs/Image.
+  depthmap: true # Publish depthmap as sensor_msgs/Image.
   cloud: false # Publish pointcloud sensor_msgs/PointCloud2. Prefer mesh or depthmap (in that order).
   features: false # Publish raw features points as sensors_msgs/Image.
-  stats: true # Publish statistics message.
+  stats: false # Publish statistics message.
 
   # Integrate load measurements over this many frames before reporting. Timing
   # resolution of /proc is only a Jiffy (usually 0.01 sec), so querying faster
@@ -57,12 +57,12 @@ output:
 
 debug:
   wireframe: true # Mesh wireframe colored by idepth.
-  features: true # Features colored by idepth.
+  features: false # Features colored by idepth.
   detections: false # Feature detections
   matches: false # Epipolar line searches (green success, red failure).
   normals: false # Image colored by interpolated normal vectors.
-  idepthmap: true # Colored idepthmap.
-  text_overlay: true # Draw text overlays on images.
+  idepthmap: false # Colored idepthmap.
+  text_overlay: false # Draw text overlays on images.
   flip_images: false # Rotated debug images by 180 degrees for display.
 
 threading:
@@ -71,7 +71,7 @@ threading:
     chunk_size: 1024 # Number of items given to each thread.
 
 features:
-  do_letterbox: False # Process only middle third of image.
+  do_letterbox: true # Process only middle third of image.
   detection:
     min_grad_mag: 5.0 # Minimum gradient magntiude.
     min_error: 100 # Minimum photo error.

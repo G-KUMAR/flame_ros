@@ -9,10 +9,10 @@
   <!-- Launch the node. -->
   <node pkg="flame_ros" type="flame_offline_asl"
         name="flame_ros"
-        output="screen">
+	      output="screen"   >
     <rosparam command="load" if="$(arg load_params)"
               file="$(find flame_ros)/cfg/$(arg param_file)"/>
-  </node>
+	      </node>
 
- 
+
 </launch>
