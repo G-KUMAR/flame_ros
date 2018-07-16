@@ -3,10 +3,10 @@
 <launch>
   <arg name="world_frame_id" default="world" />
   <arg name="camera_world_frame_id" default="camera_world" />
-  <arg name="map_frame_id" default="odom" />
+  <arg name="map_frame_id" default="map" />
 
  <node pkg="tf2_ros" type="static_transform_publisher" name="camera_world_to_map"
-        args="-0.0 0.0 0.0 0.9999997 -0. 0. 0.0007963 $(arg world_frame_id) $(arg map_frame_id)" >
+        args="-0.0 0.0 0.0 0. -0. 0 1 $(arg world_frame_id) $(arg map_frame_id)" >
   </node>
   <!-- camera RDF to FLU transform -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="camera_world_to_world"

@@ -1,3 +1,4 @@
+#!/bin/bash
 while /bin/true; do
 date +"%H:%M"
 sleep 59s

@@ -12,8 +12,8 @@ output:
   quiet: false # Turn off terminal output.
   mesh: false # Publish mesh as pcl_msgs/PolygonMesh.
   idepthmap: false # Publish idepthmap as sensor_msgs/Image.
-  depthmap: true # Publish depthmap as sensor_msgs/Image.
-  cloud: false # Publish pointcloud sensor_msgs/PointCloud2. Prefer mesh or depthmap (in that order).
+  depthmap: false # Publish depthmap as sensor_msgs/Image.
+  cloud: true # Publish pointcloud sensor_msgs/PointCloud2. Prefer mesh or depthmap (in that order).
   features: false # Publish raw features points as sensors_msgs/Image.
   stats: false # Publish statistics message.
 
@@ -26,7 +26,7 @@ output:
   # scene depth is >> 1m, then coloring by idepth will not provide much dynamic
   # range. Coloring by scene_color_scale * idepth (if scene_color_scale > 1) is
   # much more informative.
-  scene_color_scale: 1.5
+  scene_color_scale: 1
 
   # Filter out oblique triangles for display. This does not change the
   # underlying graph - it only affects the output/display.
@@ -50,12 +50,12 @@ output:
 
 debug:
   wireframe: false   # Mesh wireframe colored by idepth.
-  features: true # Features colored by idepth.
+  features: false # Features colored by idepth.
   detections: false # Feature detections
   matches: false # Epipolar line searches (green success, red failure).
   normals: false # Image colored by interpolated normal vectors.
   idepthmap: false # Colored idepthmap.
-  text_overlay: true # Draw text overlays on images.
+  text_overlay: false # Draw text overlays on images.
   flip_images: false # Rotated debug images by 180 degrees for display.
 
 threading:
@@ -87,6 +87,6 @@ regularization:
     step_x: 0.001 # Optimization primal step size.
     step_q: 125.0 # Optimization dual step size.
     theta: 0.25 # Extra-gradient step size.
-    min_height: -5.0 # Minimum height of features that are added to graph.
-    max_height: 5.0 # Maximum height of features that are added to graph.
-    check_sticky_obstacles: False
+    min_height: -2 # Minimum height of features that are added to graph.
+    max_height: 2 # Maximum height of features that are added to graph.
+    check_sticky_obstacles: true
